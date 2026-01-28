@@ -21,20 +21,20 @@ root=Tk()
 root.title("Qubify-IT's Prodlendar")
 root.geometry("950x600")
 
-# ───── Top bar ─────
+#top bar
 top=Frame(root)
 top.pack(fill=X)
 
 toggle_btn=Button(top,text="Show reminders")
 toggle_btn.pack(side=RIGHT,padx=10,pady=5)
 
-# ───── Main panels ─────
+#main panels
 left=Frame(root)
 left.pack(side=LEFT,fill=BOTH,expand=True)
 
 right=Frame(root,width=420)
 
-# ───── Left panel ─────
+#left panel
 cal=Calendar(left,date_pattern="yyyy-mm-dd")
 cal.pack(pady=10)
 
@@ -47,7 +47,7 @@ note_entry.pack(pady=10)
 
 Button(left,text="Add Reminder",command=lambda:add()).pack()
 
-# ───── Right panel layout ─────
+#right panel layout
 right_top = Frame(right)
 right_top.pack(fill=X)
 
@@ -81,7 +81,7 @@ canvas.bind_all("<MouseWheel>",on_mousewheel)
 
 Button(right_bottom,text="Delete Selected",command=lambda:delete_sel()).pack(pady=8)
 
-# ───── Reminder system ─────
+#reminder system
 selected=None
 cards=[]
 
@@ -104,7 +104,7 @@ def load():
     """):
         card=Frame(list_frame,bd=1,relief="solid",bg="#f5f5f5",padx=10,pady=8)
         card.pack(fill=X,padx=8,pady=6)
-        card.pack_propagate(True)   # 🔥 critical fix
+        card.pack_propagate(True)
 
         s="[PASSED]" if st=="passed" else "[PENDING]"
         Label(card,text=f"{s}  {dt}",anchor="w",bg="#f5f5f5").pack(fill=X)
