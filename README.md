@@ -2,7 +2,7 @@
 
 app build: alpha build 0.2 27.1.2026
 
-app only proven to work on windows
+app only proven to work on windows (ubuntu version currently being worked on)
 
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
