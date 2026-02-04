@@ -1,3 +1,5 @@
+#UBUNTU VERSION OF THIS APP HAS STOPPED WORKING TEMPORARILY. FIXES ARE CURRENTLY BEING WORKED ON.
+
 app build: u.0.2 4.2.2026
 
 read windows versions description before reading this one
