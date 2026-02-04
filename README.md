@@ -1,4 +1,6 @@
-read windows versions desc before reading this one
+app build: u.0.2 4.2.2026
+
+read windows versions description before reading this one
 
 if you want to simply use the app or try it out, just download "Qubify-ITs_Prodlendar" and open it.
 
