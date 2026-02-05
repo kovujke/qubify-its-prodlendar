@@ -2,7 +2,7 @@
 
 app build: alpha build 0.2 27.1.2026
 
-windows version (for the work in progress linux version, switch branch from "main" to "wip-ubuntu")
+windows version (for the work in progress (currently not working) linux version, switch branch from "main" to "wip-ubuntu")
 
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
