@@ -31,7 +31,7 @@ build.bat must be in the same folder as calendar_app.py while running build.bat
 
 all libraries in calendar_app.py must be installed onto the computer prior to running build.bat
 
-
+python must also be installed for the use of build.bat
 
 ### APP FEATURES
 
