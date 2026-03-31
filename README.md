@@ -1,6 +1,6 @@
-# Qubify-IT's Prodlendar (to be changed)
+# Qubify-IT's Prodlendar
 
-app build: alpha build 0.2 27.1.2026
+app build: beta build 0.5 31.3.2026
 
 windows version (for the work in progress (currently not working) linux version, switch branch from "main" to "wip-ubuntu")
 
