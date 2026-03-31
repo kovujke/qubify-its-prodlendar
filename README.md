@@ -31,6 +31,8 @@ build.bat must be in the same folder as calendar_app.py while running build.bat
 
 all libraries in calendar_app.py must be installed onto the computer prior to running build.bat
 
+the icon.png and icon.ico files are only needed for the build.bat to build the app properly and arent needed to run the .exe file
+
 
 
 ### APP FEATURES
