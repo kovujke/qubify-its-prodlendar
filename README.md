@@ -7,9 +7,9 @@ windows version (for the work in progress (currently not working) linux version,
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
 
-## CALENDAR_APP.EXE
+## Qubify-ITs Prodlendar.exe
 
-calendar_app.exe is simply the application that can be run immediately and is for people who just wanna try the app out
+Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna use the app or try it out
 
 (recommended to be run as administrator)
 
