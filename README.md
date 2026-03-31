@@ -1,4 +1,4 @@
-# Qubify-IT's Prodlendar (to be changed)
+# Qubify-IT's Prodlendar
 
 app build: alpha build 0.2 27.1.2026
 
@@ -7,7 +7,7 @@ windows version (for the work in progress (currently not working) linux version,
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
 
-## Qubify-ITs Prodlendar.EXE
+## Qubify-ITs Prodlendar.exe
 
 Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna uese the app or try it out
 
