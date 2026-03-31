@@ -137,4 +137,3 @@ IF EXIST "%LNK_PATH%" (
 
 echo.
 pause
-
