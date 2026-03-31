@@ -1,4 +1,4 @@
-import os, sqlite3, threading, time, sys, json
+import os, sqlite3, threading, time, sys, json, subprocess
 from datetime import datetime
 from tkinter import *
 from tkinter import messagebox, ttk
@@ -10,7 +10,16 @@ import socket
 if os.name == "nt":
     import winsound
     import pystray
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageDraw, ImageTk
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 # ===============================
 # Single instance logic
@@ -76,10 +85,17 @@ root = Tk()
 root.title("Qubify-IT's Prodlendar")
 root.geometry("1000x650")
 
+#Set Window and Taskbar Icon
+try:
+    root.iconbitmap(resource_path("icon.ico"))
+except Exception:
+    pass
+
 # State variables
 show_settings = False
 show_list = False
 EDIT_MODE = False
+editing_id = None
 selected_ids = set()
 
 # Color Palettes
@@ -158,6 +174,8 @@ def apply_theme():
                     widget.config(bg=C["bg"], fg="orange")
                 else:
                     widget.config(bg=C["bg"], fg=C["fg"])
+            elif "Canvas" in w_type:
+                widget.config(bg=C["bg"], highlightthickness=0)
             elif "Button" in w_type:
                  widget.config(bg=C["accent"], fg=C["fg"])
         except TclError:
@@ -222,8 +240,19 @@ def toggle_list_panel():
 settings_btn = Button(top_bar, text="⚙ Settings", command=toggle_settings_panel, bd=0, font=("Arial", 10, "bold"))
 settings_btn.pack(side=LEFT, padx=10, pady=10)
 
+# Load and place the PNG logo
+try:
+    logo_img = Image.open(resource_path("icon.png"))
+    logo_img = logo_img.resize((30, 30), Image.Resampling.LANCZOS)
+    root.top_bar_logo = ImageTk.PhotoImage(logo_img) # Attach to root to prevent garbage collection
+    logo_label = Label(top_bar, image=root.top_bar_logo, bg=top_bar["bg"])
+    logo_label.is_card_label = False # Keep theme engine from overriding it
+    logo_label.pack(side=LEFT, padx=(10, 0))
+except Exception:
+    pass
+
 app_title = Label(top_bar, text="Qubify-IT's Prodlendar", font=("Segoe UI", 12, "bold"), bg=top_bar["bg"], fg="white")
-app_title.pack(side=LEFT, padx=20)
+app_title.pack(side=LEFT, padx=(5, 20)) # Changed left padding to 5 so it sits close to the logo
 
 list_btn = Button(top_bar, text="☰ Reminders", command=toggle_list_panel, bd=0, font=("Arial", 10, "bold"))
 list_btn.pack(side=RIGHT, padx=10, pady=10)
@@ -354,11 +383,12 @@ def update_edit_buttons():
         btn_del.config(state=DISABLED)
 
 def start_edit():
-    global EDIT_MODE
+    global EDIT_MODE, editing_id
     if len(selected_ids) != 1:
         return
     
     rid = list(selected_ids)[0]
+    editing_id = rid
     row = c.execute("SELECT datetime, text FROM reminders WHERE id=?", (rid,)).fetchone()
     if row:
         dt_str, txt = row
@@ -387,7 +417,7 @@ def delete_reminders():
     load_reminders()
 
 def save_reminder():
-    global EDIT_MODE
+    global EDIT_MODE, editing_id
     
     date_val = cal.get_date()
     time_val = time_entry.get().strip()
@@ -407,14 +437,16 @@ def save_reminder():
         messagebox.showerror("Missing Text", "Please enter a reminder note.")
         return
 
-    if EDIT_MODE and len(selected_ids) == 1:
+    if EDIT_MODE and editing_id is not None:
         rid = list(selected_ids)[0]
-        c.execute("UPDATE reminders SET datetime=?, text=?, status='pending' WHERE id=?", (final_dt_str, text_val, rid))
+        c.execute("UPDATE reminders SET datetime=?, text=?, status='pending' WHERE id=?", (final_dt_str, text_val, editing_id))
         status_label.config(text="Updated!", fg="green")
         EDIT_MODE = False
+        editing_id = None
         edit_indicator.config(text="")
         # Clear inputs
         note_entry.delete("1.0", END)
+        time_entry.delete(0, END)
     else:
         c.execute("INSERT INTO reminders(datetime, text, status) VALUES(?, ?, 'pending')", (final_dt_str, text_val))
         status_label.config(text="Saved!", fg="green")
@@ -453,16 +485,28 @@ def checker_thread():
                     # Notify
                     if os.name == "nt":
                         winsound.MessageBeep(winsound.MB_ICONEXCLAMATION)
-                    
-                    notification.notify(
-                        title="Prodlendar Reminder",
-                        message=txt,
-                        timeout=10
-                    )
-                    
+                        
+                        # Clean the text so quotes don't break the PowerShell string
+                        safe_txt = txt.replace('"', "'").replace('\n', ' ')
+                        
+                        # Native Windows Action Center Notification via PowerShell
+                        ps_script = f'''
+                        [Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+                        $template = [Windows.UI.Notifications.ToastNotificationManager]::GetTemplateContent([Windows.UI.Notifications.ToastTemplateType]::ToastText02)
+                        $textNodes = $template.GetElementsByTagName("text")
+                        $textNodes.Item(0).AppendChild($template.CreateTextNode("Prodlendar Reminder")) | Out-Null
+                        $textNodes.Item(1).AppendChild($template.CreateTextNode("{safe_txt}")) | Out-Null
+                        $toast = [Windows.UI.Notifications.ToastNotification]::new($template)
+                        $notifier = [Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("Qubify-IT Prodlendar")
+                        $notifier.Show($toast)
+                        '''
+                        # 0x08000000 ensures the command prompt window stays completely hidden
+                        subprocess.run(["powershell", "-NoProfile", "-Command", ps_script], creationflags=0x08000000)
+                    else:
+                        # Fallback for other operating systems
+                        notification.notify(title="Prodlendar Reminder", message=txt, timeout=10)
                     t_c.execute("UPDATE reminders SET status='passed' WHERE id=?", (rid,))
                     t_conn.commit()
-                    
                     # Refresh UI if list is open (via main thread)
                     root.after(0, load_reminders)
             except ValueError:
@@ -472,9 +516,13 @@ def checker_thread():
 
 # Tray Icon
 def tray_setup():
-    image = Image.new("RGB", (64, 64), "black")
-    d = ImageDraw.Draw(image)
-    d.rectangle([16, 16, 48, 48], fill="#2b5278")
+    try:
+        image = Image.open(resource_path("icon.ico"))
+    except Exception:
+        # Fallback if image fails to load
+        image = Image.new("RGB", (64, 64), "black")
+        d = ImageDraw.Draw(image)
+        d.rectangle([16, 16, 48, 48], fill="#2b5278")
 
     def open_app(icon, item):
         root.after(0, restore_window)
