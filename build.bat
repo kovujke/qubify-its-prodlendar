@@ -69,6 +69,9 @@ echo.
  --windowed ^
  --clean ^
  --noconfirm ^
+ --icon="icon.ico" ^
+ --add-data "icon.ico;." ^
+ --add-data "icon.png;." ^
  --hidden-import=plyer ^
  --hidden-import=plyer.platforms ^
  --hidden-import=plyer.platforms.win ^
@@ -77,6 +80,7 @@ echo.
  --hidden-import=PIL ^
  --hidden-import=PIL.Image ^
  --hidden-import=PIL.ImageDraw ^
+ --hidden-import=PIL.ImageTk ^
  calendar_app.py
 
 IF NOT EXIST "%DIST_DIR%\calendar_app.exe" (
