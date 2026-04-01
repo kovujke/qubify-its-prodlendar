@@ -10,7 +10,7 @@ reminders are saved in C:\Users\user\AppData\Local\ReminderApp
 
 ## Qubify-ITs Prodlendar.exe
 
-Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna uese the app or try it out
+Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna use the app or try it out
 (recommended to be run as administrator)
 
 ## CALENDAR_APP.PY
