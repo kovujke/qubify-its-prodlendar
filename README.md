@@ -6,6 +6,8 @@ windows version (for the work in progress (currently not working) linux version,
 
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
+reminders are saved in C:\Users\user\AppData\Local\ReminderApp
+
 ## Qubify-ITs Prodlendar.exe
 
 Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna uese the app or try it out
