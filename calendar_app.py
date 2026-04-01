@@ -48,7 +48,7 @@ else:
 # ===============================
 # App folders & settings
 # ===============================
-APP_FOLDER = os.path.join(os.getenv("LOCALAPPDATA"), "ReminderApp")
+APP_FOLDER = os.path.join(os.getenv("LOCALAPPDATA"), "QubifyITsProdlendar")
 os.makedirs(APP_FOLDER, exist_ok=True)
 
 DB_FILE = os.path.join(APP_FOLDER, "reminders.db")

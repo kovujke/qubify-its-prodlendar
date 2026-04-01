@@ -1,15 +1,15 @@
-# Qubify-IT's Prodlendar (to be changed)
+# Qubify-IT's Prodlendar
 
-app build: alpha build 0.2 27.1.2026
+app build: beta build 0.5 31.3.2026
 
 windows version (for the work in progress (currently not working) linux version, switch branch from "main" to "wip-ubuntu")
 
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
 
-## CALENDAR_APP.EXE
+## Qubify-ITs Prodlendar.exe
 
-calendar_app.exe is simply the application that can be run immediately and is for people who just wanna try the app out
+Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna use the app or try it out
 
 (recommended to be run as administrator)
 
@@ -30,6 +30,8 @@ running build.bat makes the calendar_app.exe from the calendar_py.exe, so any ch
 build.bat must be in the same folder as calendar_app.py while running build.bat
 
 all libraries in calendar_app.py must be installed onto the computer prior to running build.bat
+
+the icon.png and icon.ico files are only needed for the build.bat to build the app properly and arent needed to run the .exe file
 
 
 

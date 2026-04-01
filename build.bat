@@ -121,13 +121,11 @@ set "PS_FILE=%TEMP%\create_startup_shortcut.ps1"
 
 if not exist "%STARTUP_DIR%" mkdir "%STARTUP_DIR%"
 
-(
-echo $w = New-Object -ComObject WScript.Shell
-echo $s = $w.CreateShortcut("%LNK_PATH%")
-echo $s.TargetPath = "%EXE_PATH%"
-echo $s.WorkingDirectory = "%CD%\%DIST_DIR%"
-echo $s.Save()
-) > "%PS_FILE%"
+echo $w = New-Object -ComObject WScript.Shell > "%PS_FILE%"
+echo $s = $w.CreateShortcut("%LNK_PATH%"^) >> "%PS_FILE%"
+echo $s.TargetPath = "%EXE_PATH%" >> "%PS_FILE%"
+echo $s.WorkingDirectory = "%CD%\%DIST_DIR%" >> "%PS_FILE%"
+echo $s.Save(^) >> "%PS_FILE%"
 
 powershell -NoProfile -ExecutionPolicy Bypass -File "%PS_FILE%"
 
