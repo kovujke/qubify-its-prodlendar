@@ -6,9 +6,9 @@ windows version (for the work in progress (currently not working) linux version,
 
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
 
-reminders saved in C:\Users\*user*\AppData\Local\QubifyITsProdlendar
+reminders saved in C:\Users\user\AppData\Local\QubifyITsProdlendar
 
-after answering yes to the startup question in build.bat, the apps shortcut appears in C:\Users\*user*\AppData\Roaming\Microsoft\Windows\Start menu\Programs
+after answering yes to the startup question in build.bat, the apps shortcut appears in C:\Users\user\AppData\Roaming\Microsoft\Windows\Start menu\Programs
 
 
 ## Qubify-ITs Prodlendar.exe
