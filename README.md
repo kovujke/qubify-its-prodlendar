@@ -1,25 +1,40 @@
 # Qubify-IT's Prodlendar
+
 app build: beta build 0.5 31.3.2026
+
 windows version (for the work in progress (currently not working) linux version, switch branch from "main" to "wip-ubuntu")
+
 some antiviruses may detect the exe as suspicious so antivirus should be turned off before launching the app
+
 reminders saved in C:\Users*user*\AppData\Local\QubifyITsProdlendar
+
 after answering yes to the startup question in build.bat, the apps shortcut appears in C:\Users*user*\AppData\Roaming\Microsoft\Windows\Start menu\Programs
 
 ## Qubify-ITs Prodlendar.exe
+
 Qubify-ITs Prodlendar.exe is the application that can be run immediately and is for people who just wanna use the app or try it out
 (recommended to be run as administrator)
 
 ## CALENDAR_APP.PY
+
 calendar_app.py is the script for the app itself and is for developers who want to change the code or do what they want with it
+
 all libraries in calendar_app.py must be installed onto the computer if used in the script
 
 ## BUILD.BAT
+
 running build.bat makes the calendar_app.exe from the calendar_py.exe, so any changes made to the .py file before running the .bat file will be seen in the calendar_app.exe after running the .bat file
+
 build.bat must be in the same folder as calendar_app.py while running build.bat
+
 all libraries in calendar_app.py must be installed onto the computer prior to running build.bat
+
 the icon.png and icon.ico files are only needed for the build.bat to build the app properly and arent needed to run the .exe file
 
 ## APP FEATURES
+
 -remove/add reminders at any specific date and time
+
 -reminders show notifications when they pass (notifications may not immediately show up, can take up to 30 seconds for the notification to show up)
+
 -has calendar and shows current day
