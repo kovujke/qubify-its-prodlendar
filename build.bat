@@ -1,15 +1,19 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
-REM variables
+REM ===============================
+REM VARIABLES
+REM ===============================
 set "APP_NAME=Qubify-ITs Prodlendar"
 set "PYTHON_EXE=python"
-set "REQUIRED_LIBS=plyer tkcalendar"
+set "REQUIRED_LIBS=plyer tkcalendar pystray PIL"
 set "EXE_NAME=Qubify-ITs Prodlendar.exe"
 set "DIST_DIR=dist"
 set "BUILD_DIR=build"
 
-REM check python
+REM ===============================
+REM CHECK PYTHON
+REM ===============================
 where %PYTHON_EXE% >nul 2>&1
 IF ERRORLEVEL 1 (
     echo ERROR: Python is not installed or not in PATH.
@@ -18,7 +22,9 @@ IF ERRORLEVEL 1 (
     exit /b
 )
 
-REM check pyinstaller
+REM ===============================
+REM CHECK PYINSTALLER
+REM ===============================
 %PYTHON_EXE% -m PyInstaller --version >nul 2>&1
 IF ERRORLEVEL 1 (
     echo ERROR: PyInstaller is not installed.
@@ -28,7 +34,9 @@ IF ERRORLEVEL 1 (
     exit /b
 )
 
-REM check required libraries
+REM ===============================
+REM CHECK REQUIRED LIBRARIES
+REM ===============================
 set "MISSING_LIBS="
 for %%L in (%REQUIRED_LIBS%) do (
     %PYTHON_EXE% -c "import %%L" 2>nul
@@ -39,15 +47,18 @@ for %%L in (%REQUIRED_LIBS%) do (
 
 if defined MISSING_LIBS (
     echo ERROR: The following Python libraries are missing:%MISSING_LIBS%
-    echo Install them using:
-    for %%L in (%REQUIRED_LIBS%) do (
-        echo pip install %%L
-    )
+    echo Install them in Windows Powershell using:
+    echo pip install plyer
+    echo pip install tkcalendar
+    echo pip install pystray
+    echo pip install pillow
     pause
     exit /b
 )
 
-REM build exe
+REM ===============================
+REM BUILD EXE
+REM ===============================
 echo ==========================================
 echo Building %APP_NAME%
 echo ==========================================
@@ -58,10 +69,18 @@ echo.
  --windowed ^
  --clean ^
  --noconfirm ^
+ --icon="icon.ico" ^
+ --add-data "icon.ico;." ^
+ --add-data "icon.png;." ^
  --hidden-import=plyer ^
  --hidden-import=plyer.platforms ^
  --hidden-import=plyer.platforms.win ^
  --hidden-import=plyer.platforms.win.notification ^
+ --hidden-import=pystray ^
+ --hidden-import=PIL ^
+ --hidden-import=PIL.Image ^
+ --hidden-import=PIL.ImageDraw ^
+ --hidden-import=PIL.ImageTk ^
  calendar_app.py
 
 IF NOT EXIST "%DIST_DIR%\calendar_app.exe" (
@@ -70,14 +89,18 @@ IF NOT EXIST "%DIST_DIR%\calendar_app.exe" (
     exit /b 1
 )
 
-REM rename exe
+REM ===============================
+REM RENAME EXE
+REM ===============================
 ren "dist\calendar_app.exe" "%EXE_NAME%"
 
 echo.
 echo Build completed successfully.
 echo.
 
-REM startup
+REM ===============================
+REM STARTUP PROMPT
+REM ===============================
 set /p STARTUP=Start %APP_NAME% on Windows startup? (yes/no): 
 
 IF /I "%STARTUP%" NEQ "yes" (
@@ -88,28 +111,24 @@ IF /I "%STARTUP%" NEQ "yes" (
 
 echo Enabling startup...
 
-REM create shortcut
+REM ===============================
+REM CREATE STARTUP SHORTCUT
+REM ===============================
 set "EXE_PATH=%CD%\%DIST_DIR%\%EXE_NAME%"
 set "STARTUP_DIR=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
 set "LNK_PATH=%STARTUP_DIR%\%EXE_NAME%.lnk"
 set "PS_FILE=%TEMP%\create_startup_shortcut.ps1"
 
-REM make sure startup folder exists
 if not exist "%STARTUP_DIR%" mkdir "%STARTUP_DIR%"
 
-REM create powershell script
-(
-echo $w = New-Object -ComObject WScript.Shell
-echo $s = $w.CreateShortcut("%LNK_PATH%")
-echo $s.TargetPath = "%EXE_PATH%"
-echo $s.WorkingDirectory = "%CD%\%DIST_DIR%"
-echo $s.Save()
-) > "%PS_FILE%"
+echo $w = New-Object -ComObject WScript.Shell > "%PS_FILE%"
+echo $s = $w.CreateShortcut("%LNK_PATH%"^) >> "%PS_FILE%"
+echo $s.TargetPath = "%EXE_PATH%" >> "%PS_FILE%"
+echo $s.WorkingDirectory = "%CD%\%DIST_DIR%" >> "%PS_FILE%"
+echo $s.Save(^) >> "%PS_FILE%"
 
-REM run powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "%PS_FILE%"
 
-REM cleanup
 del "%PS_FILE%" >nul 2>&1
 
 IF EXIST "%LNK_PATH%" (
