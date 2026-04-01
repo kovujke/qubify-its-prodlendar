@@ -21,6 +21,8 @@ all libraries in calendar_app.py must be installed onto the computer if used in 
 
 ## BUILD.BAT
 
+may not work in this alpha build
+
 running build.bat makes the calendar_app.exe from the calendar_py.exe, so any changes made to the .py file before running the .bat file will be seen in the calendar_app.exe after running the .bat file
 
 build.bat must be in the same folder as calendar_app.py while running build.bat
